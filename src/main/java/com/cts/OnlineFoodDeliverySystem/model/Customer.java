@@ -27,7 +27,7 @@ public class Customer {
 	private String password;
 	
 	@Column(name="phone",length=10)
-	private String phone;
+	private int phone;
 	
 	@Column(name="address",length=255)
 	private String address;
@@ -64,11 +64,11 @@ public class Customer {
 		this.password = password;
 	}
 
-	public String getPhone() {
+	public int getPhone() {
 		return phone;
 	}
 
-	public void setPhone(String phone) {
+	public void setPhone(int phone) {
 		this.phone = phone;
 	}
 
@@ -82,7 +82,7 @@ public class Customer {
 	public Customer() {
 		
 	}
-	public Customer(String name, String email, String password, String phone, String address) {
+	public Customer(String name, String email, String password, int phone, String address) {
 		super();
 		this.name = name;
 		this.email = email;

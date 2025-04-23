@@ -4,9 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FoodExpress - Food Delivery</title>
-    <link th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}" rel="stylesheet">
-    <style>
-        /* ... (Your existing styles) ... */
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" 
+	rel="stylesheet" 
+	integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" 
+	crossorigin="anonymous">
+	
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" 
+	integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" 
+	crossorigin="anonymous"></script>
+        <style>
+        /* --- Custom Styles --- */
+        body {
+            font-family: sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+        }
+
+        .navbar-brand img {
+            margin-right: 10px;
+        }
+
+        .hero-section {
+            background-image: url('/images/hero-background.jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay for better text readability */
+        }
+
+        .hero-section .container {
+            position: relative;
+            z-index: 1; /* Ensure text is above the overlay */
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .btn-role {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+        }
+
+        .role-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.1);
+        }
+
+        .role-card i {
+            font-size: 2.5rem;
+        }
+
+        .bg-light {
+            background-color: #f8f9fa !important; /* Ensure consistent light gray */
+        }
+
+        .why-choose i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-section p {
+                font-size: 1rem;
+            }
+
+            .btn-role {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -27,7 +128,7 @@
         <p class="lead mb-4">Delicious food delivered to your doorstep or manage your restaurant</p>
 
         <div class="d-flex gap-3 justify-content-center">
-            <a th:href="@{/customer/register}" class="btn btn-primary btn-role">
+            <a th:href="@{/customer/login}" class="btn btn-primary btn-role">
                 <i class="bi bi-person-fill me-2"></i> I'm a Customer
             </a>
             <a th:href="@{/admin/login}" class="btn btn-outline-light btn-role">
@@ -66,7 +167,7 @@
                         Manage your menu, orders, and delivery operations
                     </p>
                     <div class="d-grid">
-                        <a th:href="@{/admin/login}" class="btn btn-outline-danger">
+                        <a th:href="@{/admin/register}" class="btn btn-outline-danger">
                             Continue as Restaurant
                         </a>
                     </div>
@@ -75,8 +176,9 @@
         </div>
     </div>
 </div>
-
+<section>
 <div class="bg-light py-5">
+
     <div class="container text-center">
         <h2 class="mb-5">Why Choose FoodExpress?</h2>
         <div class="row g-4">
@@ -96,6 +198,7 @@
                 <p>100% secure payment options</p>
             </div>
         </div>
+    </div>
     </div>
 </section>
 

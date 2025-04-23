@@ -6,6 +6,11 @@ import com.cts.OnlineFoodDeliverySystem.model.Customer;
 
 public interface CustomerService {
 
-	void registerCustomer(Customer customer);
-	Optional<Customer> findCustomerByEmail(String email);	
+    void registerCustomer(Customer customer); // Assuming you have this
+
+    Optional<Customer> findCustomerByEmail(String email);
+
+    Customer getCustomerByEmail(String email);
+
+    void updateCustomer(Customer customer);
 }

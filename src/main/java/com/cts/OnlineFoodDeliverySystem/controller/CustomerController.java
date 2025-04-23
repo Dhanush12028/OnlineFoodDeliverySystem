@@ -3,6 +3,8 @@ package com.cts.OnlineFoodDeliverySystem.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,4 +69,37 @@ public class CustomerController {
 	    	model.addAttribute("items",mitems);
 	    	return "customer/displayItems";
 	    }
+	    @GetMapping("/customer/profile")
+	    public String viewProfile(Model model) {
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String email = authentication.getName();
+	        Customer customer = customerService.getCustomerByEmail(email);
+	        model.addAttribute("customer", customer);
+	        return "customer/profile";
+	    }
+
+	    @GetMapping("/customer/edit-profile")
+	    public String editProfileForm(Model model) {
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String email = authentication.getName();
+	        Customer customer = customerService.getCustomerByEmail(email);
+	        model.addAttribute("customer", customer);
+	        return "customer/edit-profile";
+	    }
+	    @PostMapping("/customer/edit-profile")
+	    public String saveProfile(@ModelAttribute Customer customer) {
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String email = authentication.getName();
+	        Customer existingCustomer = customerService.getCustomerByEmail(email);
+
+	        // Ensure the ID of the existing customer is set in the updated customer object
+	        customer.setCustomerid(existingCustomer.getCustomerid());
+
+	        // Preserve the existing password
+	        customer.setPassword(existingCustomer.getPassword());
+
+	        customerService.updateCustomer(customer);
+	        return "redirect:/customer/profile?success=Profile updated successfully!";
+	    }
+	    
 }

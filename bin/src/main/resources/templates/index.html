@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodExpress - Food Delivery</title>
+    <link th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        /* ... (Your existing styles) ... */
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/logo.png}" alt="FoodExpress" height="40">
+        </a>
+        <div class="navbar-nav">
+            <a class="nav-link" th:href="@{/customer/login}">Login</a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-3 fw-bold mb-3">Welcome to FoodExpress</h1>
+        <p class="lead mb-4">Delicious food delivered to your doorstep or manage your restaurant</p>
+
+        <div class="d-flex gap-3 justify-content-center">
+            <a th:href="@{/customer/register}" class="btn btn-primary btn-role">
+                <i class="bi bi-person-fill me-2"></i> I'm a Customer
+            </a>
+            <a th:href="@{/admin/login}" class="btn btn-outline-light btn-role">
+                <i class="bi bi-shop me-2"></i> I'm a Restaurant
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <h2 class="text-center mb-4">How would you like to proceed?</h2>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card role-card" onclick="window.location.href='/customer/register'">
+                <div class="card-body text-center p-5">
+                    <i class="bi bi-person-badge fs-1 text-primary mb-3"></i>
+                    <h3>Customer</h3>
+                    <p class="text-muted mb-4">
+                        Browse restaurants, place orders, and track your deliveries
+                    </p>
+                    <div class="d-grid">
+                        <a th:href="@{/customer/register}" class="btn btn-outline-primary">
+                            Continue as Customer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card role-card" onclick="window.location.href='/admin/login'">
+                <div class="card-body text-center p-5">
+                    <i class="bi bi-shop fs-1 text-danger mb-3"></i>
+                    <h3>Restaurant Admin</h3>
+                    <p class="text-muted mb-4">
+                        Manage your menu, orders, and delivery operations
+                    </p>
+                    <div class="d-grid">
+                        <a th:href="@{/admin/login}" class="btn btn-outline-danger">
+                            Continue as Restaurant
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-light py-5">
+    <div class="container text-center">
+        <h2 class="mb-5">Why Choose FoodExpress?</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <i class="bi bi-lightning-charge fs-1 text-warning mb-3"></i>
+                <h4>Fast Delivery</h4>
+                <p>Average delivery time under 30 minutes</p>
+            </div>
+            <div class="col-md-4">
+                <i class="bi bi-egg-fried fs-1 text-success mb-3"></i>
+                <h4>Fresh Food</h4>
+                <p>Quality ingredients from local restaurants</p>
+            </div>
+            <div class="col-md-4">
+                <i class="bi bi-credit-card fs-1 text-primary mb-3"></i>
+                <h4>Secure Payments</h4>
+                <p>100% secure payment options</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+        <div class="text-center">
+            <p>&copy; 2023 FoodExpress. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.10.0/font/bootstrap-icons.css}">
+</body>
+</html>

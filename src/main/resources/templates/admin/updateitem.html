@@ -81,6 +81,20 @@
                            th:errors="*{content}"></p>
                         -->
                     </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label"> ITEM IMAGE URL </label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="url"
+                                placeholder="Enter image url"
+                                name="url"
+                                th:field="*{Image}"
+                        />
+                   <!--   <p th:if="${#fields.hasErrors('title')}" class="text-danger"
+                        th:errors="*{title}"></p> -->
+                    </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
 

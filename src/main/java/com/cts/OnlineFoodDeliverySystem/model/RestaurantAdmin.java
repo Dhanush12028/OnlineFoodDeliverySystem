@@ -36,6 +36,40 @@ public class RestaurantAdmin {
 
 	@Column(name = "email", length = 100, unique = true, nullable = false)
 	private String email;
+	
+	@Column(name="phone",length=100,nullable = false)
+	private long phone;
+	
+	@Column(name="address",length=255,nullable=false)
+	private String address;
+	
+	public long getPhone() {
+		return phone;
+	}
+
+	public void setPhone(long phone) {
+		this.phone = phone;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+
+	@Column(name="image" ,nullable=false)
+	private String image;
 
 	public int getId() {
 		return restaurant_id;

@@ -24,7 +24,8 @@ public class MenuItems {
 	@Column(name="PRICE",nullable=false)
 	private double price;
 	//private int restaurantId;
-	
+	@Column(name="IMAGE",nullable=false)
+    private String image;
 	
 //	public menuItems(int itemId, String name, String description, double price, int restaurantId) {
 //		super();
@@ -78,6 +79,14 @@ public class MenuItems {
 //	public void setRestaurantId(int restaurantId) {
 //		this.restaurantId = restaurantId;
 //	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
 	
 	
 //	@Override

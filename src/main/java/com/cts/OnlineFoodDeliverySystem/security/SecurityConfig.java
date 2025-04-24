@@ -54,10 +54,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain customerFilterChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/customer/**", "/") // Apply this chain to /customer/** and potentially root
+            .securityMatcher("/customer/**", "/", "/cart/**") // Include /cart/** in this filter chain
             .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/", "/images/**", "/webjars/**", "/css/**", "/js/**", "/customer/register").permitAll()
-                .requestMatchers("/customer/**").hasAuthority("CUSTOMER")
+                .requestMatchers("/customer/**", "/cart/**").hasAuthority("CUSTOMER") // Secure /customer/** and /cart/** for CUSTOMER role
                 .anyRequest().authenticated()
             )
             .formLogin((form) -> form
@@ -70,7 +70,7 @@ public class SecurityConfig {
                 .permitAll()
             )
             .logout((logout) -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) // Consider a specific logout for customers if needed
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/")
                 .permitAll()
                 .deleteCookies("JSESSIONID")

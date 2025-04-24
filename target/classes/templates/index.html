@@ -24,13 +24,14 @@
         }
 
         .hero-section {
-            background-image: url('/images/hero-background.jpg'); /* Replace with your image path */
+            background-image: url('https://www.kopatech.com/images/blogs/factors-which-influence-consumer-to-use-an-online-food-delivery-system.webp'); /* Replace with your image path */
             background-size: cover;
             background-position: center;
             color: white;
             text-align: center;
             padding: 100px 0;
             position: relative;
+            margin-bottom:5px;
         }
 
         .hero-section::before {
@@ -128,8 +129,8 @@
         <p class="lead mb-4">Delicious food delivered to your doorstep or manage your restaurant</p>
 
         <div class="d-flex gap-3 justify-content-center">
-            <a th:href="@{/customer/login}" class="btn btn-primary btn-role">
-                <i class="bi bi-person-fill me-2"></i> I'm a Customer
+            <a th:href="@{/customer/login}" class="btn btn-outline-light btn-role">
+                <i class="bi bi-shop me-2"></i> I'm a Customer
             </a>
             <a th:href="@{/admin/login}" class="btn btn-outline-light btn-role">
                 <i class="bi bi-shop me-2"></i> I'm a Restaurant

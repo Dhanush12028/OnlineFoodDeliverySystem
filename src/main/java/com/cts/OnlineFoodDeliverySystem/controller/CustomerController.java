@@ -3,6 +3,8 @@ package com.cts.OnlineFoodDeliverySystem.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,7 +66,51 @@ public class CustomerController {
 	    public String DisplayItemsInRestaurant(@PathVariable("email") String email,Model model) {
 	    	RestaurantAdmin radmin=restaurantAdminService.findAdminByEmail(email).get();
 	    	List<MenuItems> mitems=menuItemService.getMenuItemsByRestaurantId(radmin.getId());
+	    	model.addAttribute("rest",radmin);
 	    	model.addAttribute("items",mitems);
 	    	return "customer/displayItems";
 	    }
+	    @GetMapping("/customer/profile")
+	    public String viewProfile(Model model) {
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String email = authentication.getName();
+	        Customer customer = customerService.getCustomerByEmail(email);
+	        model.addAttribute("customer", customer);
+	        return "customer/profile";
+	    }
+
+	    @GetMapping("/customer/edit-profile")
+	    public String editProfileForm(Model model) {
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String email = authentication.getName();
+	        Customer customer = customerService.getCustomerByEmail(email);
+	        model.addAttribute("customer", customer);
+	        return "customer/edit-profile";
+	    }
+	    @PostMapping("/customer/edit-profile")
+	    public String saveProfile(@ModelAttribute Customer customer) {
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String email = authentication.getName();
+	        Customer existingCustomer = customerService.getCustomerByEmail(email);
+
+	        // Ensure the ID of the existing customer is set in the updated customer object
+	        customer.setCustomerid(existingCustomer.getCustomerid());
+
+	        // Preserve the existing password
+	        customer.setPassword(existingCustomer.getPassword());
+
+	        customerService.updateCustomer(customer);
+	        return "redirect:/customer/profile?success=Profile updated successfully!";
+	    }
+	    
+	    
+	    @GetMapping("/customer/dashboard/Restaurants/{email}/view/display/{id}")
+	    public String DisplayItemsInRestaurant(@PathVariable("email") String email,@PathVariable("id") int id,Model model) {
+	    	RestaurantAdmin radmin=restaurantAdminService.findAdminByEmail(email).get();
+	    	List<MenuItems> mitems=menuItemService.getMenuItemsByRestaurantId(radmin.getId());
+	    	model.addAttribute("rest",radmin);
+	    	model.addAttribute("items",id);
+	    	return "customer/itemcart";
+	    }
+	    
 }

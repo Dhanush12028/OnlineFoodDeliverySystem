@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,21 @@ public class CustomerServiceImpl implements CustomerService{
 	@Override
 	public Optional<Customer> findCustomerByEmail(String email) {
 		// TODO Auto-generated method stub
+		
 		return customerRepository.findByEmail(email);
+	}
+
+	@Override
+	public Customer getCustomerByEmail(String email) {
+		// TODO Auto-generated method stub
+		return customerRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Customer not found with email: " + email));
+	}
+
+	@Override
+	public void updateCustomer(Customer customer) {
+		// TODO Auto-generated method stub
+		customerRepository.save(customer);
 	}
 
 }

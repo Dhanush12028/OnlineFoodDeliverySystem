@@ -31,11 +31,25 @@
 <h1>Welcome, <span th:text="${#authentication.name}"></span>!</h1>
         <p class="lead">This is your customer dashboard.</p>
  
-        <div class="card mt-3">
-            <div class="card-body">
-                <h5 class="card-title">Your Recent Orders</h5>
-                <p class="card-text">No recent orders yet.</p>
-                <a href="/customer/dashboard/Restaurants" class="btn btn-primary">Browse Restaurants</a>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Profile Management</h5>
+                        <p class="card-text">View and edit your profile information.</p>
+                        <a href="/customer/profile" class="btn btn-outline-primary btn-sm mt-2">View Profile</a>
+                        <a href="/customer/edit-profile" class="btn btn-primary btn-sm mt-2">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card mt-3 mt-md-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Your Recent Orders</h5>
+                        <p class="card-text">No recent orders yet.</p>
+                        <a href="/customer/dashboard/Restaurants" class="btn btn-primary">Browse Restaurants</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -43,4 +57,4 @@
     <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
- 
+ .

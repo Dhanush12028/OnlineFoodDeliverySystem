@@ -22,7 +22,7 @@
         <div>
             <form th:action="@{/cart/add/{itemId}(itemId=${items})}" method="post">
                 <div class="mb-3">
-                    <label for="quantity" class="form-label">Quantity:</label>
+                    <label for="quantity" class="form-label">Quantity :</label>
                     <input type="number" class="form-control form-control-sm" id="quantity" name="quantity" value="1" min="1">
                 </div>
                 <button type="submit" class="btn btn-success">Add to Cart</button>

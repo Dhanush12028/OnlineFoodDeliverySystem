@@ -1,59 +1,95 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org">>
+    xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Menu Items</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
-          crossorigin="anonymous">
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
-            crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<title>ITEMS</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+  crossorigin="anonymous">
+ 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+  crossorigin="anonymous"></script>
+ 
+<style>
+  body {
+  background-image: url('https://images.unsplash.com/photo-1651440204296-a79fa9988007?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+ 
+.navbar {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+ 
+.card {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+ 
+.card-title {
+  color: #000;
+}
+ 
+</style>
+ 
+ 
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">FoodExpress - Customer</a>
-            <div class="navbar-nav ms-auto"> <li class="nav-item">
-                    <a class="nav-link" th:href="@{/cart}">
-                        <i class="bi bi-cart-fill"></i> Cart
-                        <span class="badge bg-secondary" th:text="${cartItemCount}">0</span>
-                    </a>
-                </li>
-                <span class="navbar-text text-white me-3 ms-3" sec:authentication="name"></span>
-                <form th:action="@{/logout}" method="post" class="d-inline">
-                    <input type="submit" class="btn btn-outline-light btn-sm" value="Logout"/>
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                </form>
-            </div>
+ 
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Food Express</a>
+        <a class="navbar-brand ms-2" th:href="@{/}">Home</a>
+        <div class="d-flex justify-content-center flex-grow-1">
+            <h1 class="navbar-brand mb-0">Menu Items</h1>
         </div>
-    </nav>
-    <div class="container mt-5">
-        <h1>Menu Items</h1>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            <div th:each="item : ${items}" class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${item.name}">Item Name</h5>
-                        <p class="card-text" th:text="${item.description}">Description of the item.</p>
-                        <p class="card-text">Price: <span th:text="${#numbers.formatDecimal(item.price, 1, 'DEFAULT', 2, 'DEFAULT')}">Price</span></p>
-                        <form th:action="@{/cart/add/{itemId}(itemId=${item.itemId})}" method="post">
-                            <div class="mb-3">
-                                <label for="quantity" class="form-label">Quantity:</label>
-                                <input type="number" class="form-control form-control-sm" id="quantity" name="quantity" value="1" min="1">
-                            </div>
-                            <button type="submit" class="btn btn-success">Add to Cart</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <form class="d-flex me-2">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-light" type="submit">Search</button>
+        </form>
+  </div>
+</nav>
+ 
+ 
+  <br/>
+  <br/>
+ 
+  <div class="container">
+  <div class="row">
+    <div th:each="item : ${items}" class="col-md-4 mb-4">
+      <div class="card" style="width: 18rem; ">
+     
+     
+ 
+     
+<img class="card-img-top" th:src="${item.image}" alt="Card image cap">
+ 
+        <div class="card-body text-center">
+          <h5 class="card-title" th:text="${item.name}">Item Name</h5>
+          <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>  -->
+        <a th:href="@{/customer/dashboard/Restaurants/{email}/view/display/{id}(email=${rest.email},id=${item.itemId})}" class="btn btn-primary">View Items</a>
+        <!--  <a th:href="@{customer/restaurants/{id}/view/display(id=${item.itemId})}"  class="btn btn-primary">View</a> -->
         </div>
-        <div class="mt-3">
-            <a th:href="@{/customer/dashboard/Restaurants}" class="btn btn-secondary">Back to Restaurants</a>
-        </div>
+      </div>
     </div>
+  </div>
+</div>
+ 
+ 
+ 
+ 
+ 
+ 
+  <!--
+    <div th:each="item : ${items}">
+        <a class="btn btn-primary" th:text="${item.name}" th:href="@{customer/restaurants/{id}/view/display(id=${item.itemId})}" role="button">Item Name</a></td>
+    </div>
+  -->
+ 
 </body>
 </html>

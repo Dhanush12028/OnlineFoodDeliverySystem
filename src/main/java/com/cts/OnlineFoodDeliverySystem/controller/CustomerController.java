@@ -66,6 +66,7 @@ public class CustomerController {
 	    public String DisplayItemsInRestaurant(@PathVariable("email") String email,Model model) {
 	    	RestaurantAdmin radmin=restaurantAdminService.findAdminByEmail(email).get();
 	    	List<MenuItems> mitems=menuItemService.getMenuItemsByRestaurantId(radmin.getId());
+	    	model.addAttribute("rest",radmin);
 	    	model.addAttribute("items",mitems);
 	    	return "customer/displayItems";
 	    }
@@ -100,6 +101,16 @@ public class CustomerController {
 
 	        customerService.updateCustomer(customer);
 	        return "redirect:/customer/profile?success=Profile updated successfully!";
+	    }
+	    
+	    
+	    @GetMapping("/customer/dashboard/Restaurants/{email}/view/display/{id}")
+	    public String DisplayItemsInRestaurant(@PathVariable("email") String email,@PathVariable("id") int id,Model model) {
+	    	RestaurantAdmin radmin=restaurantAdminService.findAdminByEmail(email).get();
+	    	List<MenuItems> mitems=menuItemService.getMenuItemsByRestaurantId(radmin.getId());
+	    	model.addAttribute("rest",radmin);
+	    	model.addAttribute("items",id);
+	    	return "customer/itemcart";
 	    }
 	    
 }

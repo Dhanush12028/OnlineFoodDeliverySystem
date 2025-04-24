@@ -40,7 +40,7 @@ public class RestaurantAdmin {
 	@Column(name="phone",length=100,nullable = false)
 	private long phone;
 	
-	@Column(name="address",length=255,nullable=false)
+	@Column(name="address",length=500,nullable=false)
 	private String address;
 	
 	public long getPhone() {

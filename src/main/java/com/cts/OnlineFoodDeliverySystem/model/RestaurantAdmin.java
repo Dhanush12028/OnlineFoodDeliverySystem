@@ -1,6 +1,5 @@
 package com.cts.OnlineFoodDeliverySystem.model;
 
-import java.awt.MenuItem;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -38,16 +37,16 @@ public class RestaurantAdmin {
 	private String email;
 	
 	@Column(name="phone",length=100,nullable = false)
-	private long phone;
+	private String phone;
 	
-	@Column(name="address",length=500,nullable=false)
+	@Column(name="address",length=1000,nullable=false)
 	private String address;
 	
-	public long getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
-	public void setPhone(long phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
@@ -129,11 +128,19 @@ public class RestaurantAdmin {
 
 	}
 
-	public RestaurantAdmin(String restaurantName, String adminName, String email, String password) {
+	public RestaurantAdmin(int restaurant_id, String restaurantName, String adminName, String email, String phone,
+			String address, String image, List<MenuItems> menuitems, String password) {
+		super();
+		this.restaurant_id = restaurant_id;
 		this.restaurantName = restaurantName;
 		this.adminName = adminName;
 		this.email = email;
+		this.phone = phone;
+		this.address = address;
+		this.image = image;
+		this.menuitems = menuitems;
 		this.password = password;
 	}
+
 
 }

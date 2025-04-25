@@ -26,7 +26,8 @@ public class Customer {
 	@Column(name = "password", length = 100, nullable = false)
 	private String password;
 	
-	@Column(name="phone",length=19)
+
+	@Column(name="phone",length=10)
 	private long phone;
 	
 	@Column(name="address",length=255)

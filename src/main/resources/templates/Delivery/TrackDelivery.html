@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Delivery</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h3 class="text-center mt-5">Track Your Delivery</h3>
+        <form action="/track-delivery" method="get">
+            <div class="form-group">
+                <label for="deliveryId">Enter Delivery ID</label>
+                <input type="text" id="deliveryId" name="deliveryId" class="form-control" placeholder="Delivery ID" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Track Delivery</button>
+        </form>
+ 
+        <div th:if="${status}">
+            <h4 class="mt-4">Delivery Status:</h4>
+            <p>Order Status: <span th:text="${status.orderStatus}"></span></p>
+            <p>Estimated Time of Arrival: <span th:text="${status.eta}"></span></p>
+        </div>
+    </div>
+</body>
+</html>

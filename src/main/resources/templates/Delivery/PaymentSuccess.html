@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mt-5">Payment Successful!</h2>
+        <p class="text-center">Your order has been successfully processed. Your order ID is: <span th:text="${orderId}"></span></p>
+        <div class="text-center">
+            <a href="/customer/dashboard" class="btn btn-primary">Go to Dashboard</a>
+            <a href="/track-delivery" class="btn btn-secondary">Track Your Delivery</a>
+        </div>
+    </div>
+</body>
+</html>

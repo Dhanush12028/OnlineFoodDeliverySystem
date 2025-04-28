@@ -34,6 +34,18 @@
             <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control" id="password" th:field="*{password}" required>
         </div>
+         <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="phone" th:field="*{phone}" required>
+        </div>
+        <div class="mb-3">
+	    <label for="address" class="form-label">Address</label>
+	    <textarea class="form-control" id="address" th:field="*{address}" rows="3" required></textarea>
+		</div>
+         <div class="mb-3">
+             <label class="form-label">Restaurant image URL</label>
+             <input type="text" class="form-control" id="url" placeholder="Enter image url" name="url" th:field="*{image}" />
+         </div>
         <button type="submit" class="btn btn-danger">Register Restaurant</button>
         <p class="mt-3">Already a restaurant admin? <a th:href="@{/admin/login}">Login here</a></p>
     </form>
@@ -41,4 +53,3 @@
 <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
- 

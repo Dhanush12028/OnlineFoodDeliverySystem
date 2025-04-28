@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Shopping Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Your Shopping Cart</h1>
+        <div th:if="${cartItems == null or cartItems.isEmpty()}">
+            <p>Your cart is empty.</p>
+            <a th:href="@{/customer/dashboard/Restaurants}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+        <div th:unless="${cartItems == null or cartItems.isEmpty()}">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th>Actions</th>
+                </tr>
+                <tbody>
+                <tr th:each="cartItem : ${cartItems}">
+                    <td th:text="${cartItem.menuItem.name}">Item Name</td>
+                    <td th:text="${#numbers.formatDecimal(cartItem.menuItem.price, 1, 'DEFAULT', 2, 'DEFAULT')}">Price</td>
+                    <td>
+                        <form th:action="@{/cart/update/{cartItemId}(cartItemId=${cartItem.cartItemId})}" method="post" class="form-inline">
+                            <div class="form-group">
+                                <input type="number" class="form-control form-control-sm mr-2" th:value="${cartItem.quantity}" name="quantity" min="1">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">Update</button>
+                            </div>
+                        </form>
+                    </td>
+                    <td th:text="${#numbers.formatDecimal(cartItem.menuItem.price * cartItem.quantity, 1, 'DEFAULT', 2, 'DEFAULT')}">Subtotal</td>
+                    <td>
+                        <form th:action="@{/cart/remove/{cartItemId}(cartItemId=${cartItem.cartItemId})}" method="post">
+                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="row justify-content-end">
+                <div class="col-md-4">
+                    <h3>Total: <span th:text="${#numbers.formatDecimal(cartTotal, 1, 'DEFAULT', 2, 'DEFAULT')}" class="font-weight-bold"></span></h3>
+                    <button id="checkout-button" class="btn btn-success btn-block">Proceed to Checkout</button>
+                    <a th:href="@{/customer/dashboard/Restaurants}" class="btn btn-primary btn-block mt-2">Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        document.getElementById('checkout-button').onclick = function () {
+            const cartTotalElement = document.querySelector('.font-weight-bold');
+            let cartTotal = 0;
+            if (cartTotalElement) {
+                cartTotal = parseFloat(cartTotalElement.textContent.replace(/,/g, ''));
+            }
+
+            console.log('Cart Total:', cartTotal);
+            
+
+            fetch('http://localhost:8106/api/payments/create-order?amount=' + cartTotal + '&currency=INR', {
+                method: 'POST'
+            })
+                .then(response => response.json())
+                .then(order => {
+                    console.log('Order:', order);
+                    const options = {
+                        key: "rzp_test_b45zDft7CTQekz",
+                        amount: order.amount,
+                        currency: order.currency,
+                        name: "Food Express",
+                        description: "Test Transaction",
+                        order_id: order.id,
+                        handler: function (response) {
+                            alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+                        },
+                        theme: {
+                            color: "#3399cc"
+                        }
+                    };
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+                })
+                .catch(err => console.error('Error:', err));
+        };
+    </script>
+</body>
+</html>

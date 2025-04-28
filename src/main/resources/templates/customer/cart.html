@@ -23,7 +23,6 @@
                     <th>Subtotal</th>
                     <th>Actions</th>
                 </tr>
-                </thead>
                 <tbody>
                 <tr th:each="cartItem : ${cartItems}">
                     <td th:text="${cartItem.menuItem.name}">Item Name</td>
@@ -59,12 +58,21 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         document.getElementById('checkout-button').onclick = function () {
-            const cartTotal = /*[[${cartTotal}]]*/ 0; // Thymeleaf will replace this with the actual cart total
-            fetch('http://localhost:8085/api/payments/create-order?amount=' + cartTotal + '&currency=INR', {
+            const cartTotalElement = document.querySelector('.font-weight-bold');
+            let cartTotal = 0;
+            if (cartTotalElement) {
+                cartTotal = parseFloat(cartTotalElement.textContent.replace(/,/g, ''));
+            }
+
+            console.log('Cart Total:', cartTotal);
+            
+
+            fetch('http://localhost:8106/api/payments/create-order?amount=' + cartTotal + '&currency=INR', {
                 method: 'POST'
             })
                 .then(response => response.json())
                 .then(order => {
+                    console.log('Order:', order);
                     const options = {
                         key: "rzp_test_b45zDft7CTQekz",
                         amount: order.amount,
@@ -82,7 +90,7 @@
                     const rzp = new Razorpay(options);
                     rzp.open();
                 })
-                .catch(err => console.error(err));
+                .catch(err => console.error('Error:', err));
         };
     </script>
 </body>

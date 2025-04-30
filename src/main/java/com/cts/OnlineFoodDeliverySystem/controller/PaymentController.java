@@ -13,13 +13,13 @@ public class PaymentController {
     private PaymentService razorpayService;
 
     @PostMapping("/create-order")
-    public String createOrder(@RequestParam int amount , @RequestParam String currency){
-
+    @ResponseBody
+    public String createOrder(@RequestParam int amount, @RequestParam String currency){
         try {
+            // Multiply the amount by 100 to convert rupees to paise
             return razorpayService.createOrder(amount, currency, "recepient_100");
         } catch (RazorpayException e) {
             throw new RuntimeException(e);
         }
     }
-
 }

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Checkout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Checkout</h1>
+        <h2>Your Cart Summary</h2>
+        <ul class="list-group mb-3">
+            <li class="list-group-item" th:each="item : ${cartItems}">
+                <span th:text="${item.menuItem.name}">Item Name</span> - Quantity: <span th:text="${item.quantity}"></span> - Price: ₹<span th:text="${#numbers.formatDecimal(item.menuItem.price, 1, 'DEFAULT', 2, 'DEFAULT')}"></span>
+            </li>
+            <li class="list-group-item active">
+                <strong>Total: ₹<span th:text="${#numbers.formatDecimal(cartTotal, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></strong>
+            </li>
+        </ul>
+
+        <h2>Delivery Details</h2>
+        <form id="checkoutForm">
+            <div class="mb-3">
+                <label for="deliveryAddress" class="form-label">Delivery Address</label>
+                <textarea class="form-control" id="deliveryAddress" name="deliveryAddress" rows="3" required></textarea>
+            </div>
+
+            <h2>Payment Method</h2>
+            <div class="mb-3">
+                <label for="paymentMethod" class="form-label">Select Payment Method</label>
+                <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+                    <option value="Razorpay">Razorpay</option>
+                    <option value="Cash on Delivery">Cash on Delivery (Not yet implemented)</option>
+                    </select>
+            </div>
+
+            <button type="button" id="placeOrderButton" class="btn btn-primary">Place Order with Razorpay</button>
+        </form>
+
+        <div class="mt-3">
+            <a th:href="@{/cart}" class="btn btn-secondary">Back to Cart</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script th:inline="javascript">
+    document.getElementById('placeOrderButton').onclick = function () {
+        const cartTotalElement = document.querySelector('.list-group-item.active strong span');
+        console.log('cartTotalElement:', cartTotalElement);
+        let cartTotalText = '';
+        if (cartTotalElement) {
+            cartTotalText = cartTotalElement.textContent;
+            console.log('cartTotalText (before replace):', cartTotalText);
+            cartTotalText = cartTotalText.replace('₹', '').replace(/,/g, '').trim();
+            console.log('cartTotalText (after replace):', cartTotalText);
+            cartTotal = parseFloat(cartTotalText);
+            console.log('cartTotal (parsed):', cartTotal);
+        } else {
+            console.error('Could not find cartTotalElement');
+            return;
+        }
+
+        const deliveryAddress = document.getElementById('deliveryAddress').value;
+        const paymentMethod = document.getElementById('paymentMethod').value;
+
+        if (!deliveryAddress) {
+            alert('Please enter your delivery address.');
+            return;
+        }
+
+        if (paymentMethod === 'Razorpay') {
+            console.log('Amount being sent to create-order:', cartTotal * 100);
+            fetch('/api/payments/create-order?amount=' + Math.round(cartTotal * 100) + '&currency=INR', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(order => {
+                console.log('Razorpay Order:', order);
+                const options = {
+                    key: "rzp_test_b45zDft7CTQekz", // Replace with your actual key in production
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: "Food Express",
+                    description: "Online Food Order",
+                    order_id: order.id,
+                    handler: function (response) {
+                        console.log('Razorpay Payment Response:', response);
+
+                        // Get CSRF token from meta tags
+                        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                        fetch('/order/payment-confirmation', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                [csrfHeader]: csrfToken
+                            },
+                            body: JSON.stringify({
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_order_id: response.razorpay_order_id,
+                                deliveryAddress: deliveryAddress,
+                                paymentMethod: paymentMethod
+                            })
+                        })
+                        .then(confirmationResponse => confirmationResponse.json())
+                        .then(confirmationData => {
+                            console.log('Payment Confirmation Data:', confirmationData);
+                            alert("Payment Successful! Order ID: " + confirmationData.orderId);
+                            window.location.href = '/order/confirmation/' + confirmationData.orderId;
+                        })
+                        .catch(err => console.error('Payment Confirmation Error:', err));
+                    },
+                    theme: {
+                        color: "#3399cc"
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+            })
+            .catch(err => console.error('Error creating Razorpay order:', err));
+        } else if (paymentMethod === 'Cash on Delivery') {
+            alert('Cash on Delivery is not yet implemented.');
+        }
+    };
+    </script>
+</body>
+</html>

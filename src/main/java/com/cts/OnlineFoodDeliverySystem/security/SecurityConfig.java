@@ -54,10 +54,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain customerFilterChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/customer/**", "/", "/cart/**") // Include /cart/** in this filter chain
+            .securityMatcher("/customer/**", "/", "/cart/**","/order/**") // Include /cart/** in this filter chain
             .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/", "/images/**", "/webjars/**", "/css/**", "/js/**", "/customer/register").permitAll()
-                .requestMatchers("/customer/**", "/cart/**").hasAuthority("CUSTOMER") // Secure /customer/** and /cart/** for CUSTOMER role
+                .requestMatchers("/customer/**", "/cart/**","/order/**").hasAuthority("CUSTOMER") // Secure /customer/** and /cart/** for CUSTOMER role
                 .anyRequest().authenticated()
             )
             .formLogin((form) -> form

@@ -9,7 +9,6 @@ public interface OrderService {
     Order placeOrder(Customer customer, String deliveryAddress, String paymentMethod);
     Order getOrderById(Long orderId);
     List<Order> getOrdersByCustomer(Customer customer);
-    // Add other methods as needed (e.g., updateOrderStatus)
     Order processOrderAfterPayment(Customer customer, String razorpayPaymentId, String razorpayOrderId, String deliveryAddress, String paymentMethod);
-
+    List<Order> getRecentOrdersByCustomer(Customer customer);
 }

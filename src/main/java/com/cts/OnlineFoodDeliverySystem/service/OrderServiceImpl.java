@@ -34,6 +34,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+    
+    @Autowired
+    private DeliveryService deliveryService;
+
 
     @Transactional
     public Order placeOrder(Customer customer, String deliveryAddress, String paymentMethod) {
@@ -59,7 +63,17 @@ public class OrderServiceImpl implements OrderService {
             savedOrder = orderRepository.save(order);
             logger.info("Order saved successfully with ID: {}", savedOrder.getOrderId());
             saveOrderItems(savedOrder, cartItems);
+            savedOrder = orderRepository.save(order);
+            logger.info("Order saved successfully with ID: {}", savedOrder.getOrderId());
+
+            // Save order items
+            saveOrderItems(savedOrder, cartItems);
+
+          
+
             return savedOrder;
+
+          
         } catch (Exception e) {
             logger.error("Error saving order for customer: {}", customer.getEmail(), e);
             return null;
@@ -90,6 +104,7 @@ public class OrderServiceImpl implements OrderService {
             logger.info("Order saved successfully with ID after payment: {}", savedOrder.getOrderId());
             saveOrderItems(savedOrder, cartItems);
             savePayment(savedOrder, paymentMethod, savedOrder.getTotalAmount(), "Successful", razorpayPaymentId, razorpayOrderId);
+         
             cartItemRepository.deleteAll(cartItems);
             return savedOrder;
         } catch (Exception e) {
@@ -147,4 +162,10 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getOrdersByCustomer(Customer customer) {
         return orderRepository.findByCustomerOrderByOrderDateDesc(customer);
     }
+    @Override
+	public List<Order> getRecentOrdersByCustomer(Customer customer) {
+		// TODO Auto-generated method stub
+		return orderRepository.findTopRecentOrdersByCustomerId(customer.getCustomerid(), 5);
+	}
+ 
 }

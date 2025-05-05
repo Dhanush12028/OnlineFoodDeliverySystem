@@ -1,5 +1,6 @@
 package com.cts.OnlineFoodDeliverySystem.controller;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.cts.OnlineFoodDeliverySystem.model.Customer;
 import com.cts.OnlineFoodDeliverySystem.model.MenuItems;
+import com.cts.OnlineFoodDeliverySystem.model.Order;
 import com.cts.OnlineFoodDeliverySystem.model.RestaurantAdmin;
 import com.cts.OnlineFoodDeliverySystem.service.CustomerService;
 import com.cts.OnlineFoodDeliverySystem.service.MenuItemsService;
+import com.cts.OnlineFoodDeliverySystem.service.OrderService;
 import com.cts.OnlineFoodDeliverySystem.service.RestaurantAdminService;
 
 @Controller
@@ -28,6 +31,9 @@ public class CustomerController {
 	 	private RestaurantAdminService restaurantAdminService;
 	 @Autowired
 	 	private MenuItemsService menuItemService;
+	 @Autowired
+	 	private OrderService orderService;
+	 
 	    @GetMapping("/customer/register")
 	    public String showCustomerRegistrationForm(Model model) {
 	        model.addAttribute("customer", new Customer());
@@ -51,7 +57,21 @@ public class CustomerController {
 	    }
 
 	    @GetMapping("/customer/dashboard")
-	    public String customerDashboard() {
+	    public String customerDashboard(Model model) {
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String currentCustomerEmail = authentication.getName();
+	        Customer customer = customerService.getCustomerByEmail(currentCustomerEmail);
+	        List<Order> recentOrders = orderService.getRecentOrdersByCustomer(customer);
+ 
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	        List<String> formattedOrderDates = recentOrders.stream()
+	                .map(order -> order.getOrderDate().format(formatter))
+	                .toList();
+ 
+	        model.addAttribute("customer", customer);
+	        model.addAttribute("recentOrders", recentOrders);
+	        model.addAttribute("formattedOrderDates", formattedOrderDates); // Add the formatted dates
+ 
 	        return "customer/dashboard";
 	    }
 	    
